@@ -1,5 +1,6 @@
 test:
-	python *_test.py
+	@for i in *_test.py; do python $$i; done
+
 
 clean:
 	rm -f *~ *.pyc
