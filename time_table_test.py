@@ -8,16 +8,16 @@ class TimeTableTest(unittest.TestCase):
         self.program = read("""
 - channel: Foo
   time:    "12:00"
-  repeat: Sun
+  at: Sun
   interval: "0:30"
   foo : bar
 - channel: Bar
   time: "13:23"
-  repeat: Monday
+  at: Monday
   interval: "00:30"
 - channel: Bar
   time: "14:00"
-  repeat: Wed
+  at: Wed
   interval: "1:00"
 """)
 
@@ -33,9 +33,9 @@ class TimeTableTest(unittest.TestCase):
                          [ x.time for x in self.program ])
 
 
-    def testRepeat(self):
+    def testAt(self):
         self.assertEqual([ Sunday, Monday, Wednesday ],
-                         [ x.repeat for x in self.program ])
+                         [ x.at for x in self.program ])
 
     def testSec(self):
         self.assertEqual([ self.time(0,30), self.time(0, 30), self.time(1,0) ],

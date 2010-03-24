@@ -40,9 +40,9 @@ def parse_repeat(s):
 def read(str):
     def parse():
         for x in yaml.load(str):
-            update(x, 'time', parse_time)
+            update(x, 'time'    , parse_time)
             update(x, 'interval', parse_time)
-            update(x, 'repeat', parse_repeat)
+            update(x, 'at'      , parse_repeat)
             yield open_object.OpenObject(x)
     return TimeTable(parse())
 
