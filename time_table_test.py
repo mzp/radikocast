@@ -45,5 +45,4 @@ class TimeTableTest(unittest.TestCase):
         self.assertEqual(['bar',None,None],
                          [x.foo for x in self.program])
 
-if __name__ == '__main__':
-    unittest.main()
+

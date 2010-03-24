@@ -1,5 +1,6 @@
+NOSETEST=nosetests-2.6
 test:
-	@for i in *_test.py; do python $$i; done
+	$(NOSETEST)
 
 
 clean:

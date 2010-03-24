@@ -21,6 +21,3 @@ class OpenObjectTest(unittest.TestCase):
 
     def testNotValue(self):
         self.assertEqual(None, self.obj.baz)
-
-if __name__ == '__main__':
-    unittest.main()
