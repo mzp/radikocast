@@ -12,22 +12,38 @@ class Storage(object):
             self.execute__(lambda db: db.execute("""
 create table podcasts(
    id integer primary key,
-   created_at int,
    name text,
    path text,
+   created_at integer,
    object blob
 );
 """))
 
     def add(self, **args):
-        self.execute__(lambda db: db.execute("insert into podcasts(id,name,path,object) values(null,?,?,?)",
-                                             (args['name'], args['path'], self.dump__( args ))))
+        self.execute__(lambda db: db.execute("insert into podcasts(id,name,created_at, path,object) values(null,?,?,?,?)",
+                                             (args['name'], args['created_at'], args['path'], self.dump__( args ))))
 
     def find_by_path(self, path):
         def f(db):
             one = db.execute("select object from podcasts where path = ?", [ path ]).fetchone()
             return self.load__(one[0]) if one != None else None
+        return self.execute__(f)
 
+    def find_by_name(self, name):
+        def f(db):
+            cur = db.execute("select object from podcasts where name = ? order by created_at desc",
+                             [ name ])
+            return map(lambda s: self.load__(s[0]), cur.fetchall())
+        return self.execute__(f)
+
+    def find_all(self):
+        def f(db):
+            res = []
+            for name in db.execute("select name from podcasts group by name order by name").fetchall():
+                cur = db.execute("select object from podcasts where name = ? order by created_at desc", name)
+                res.append((name[0],
+                            map(lambda s: self.load__(s[0]), cur.fetchall())))
+            return res
         return self.execute__(f)
 
     def execute__(self, f):
