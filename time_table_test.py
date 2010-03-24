@@ -6,25 +6,36 @@ from time_table import *
 
 class TimeTableTest(unittest.TestCase):
     def setUp(self):
-        self.program = TimeTable.read(["Foo 12:00 Sun 0:0:30",
-                                       "Bar 13:23 Mon 30:00",
-                                       "Bar 14:00 Wed 1:0:0"])
+        self.program = TimeTable.read("""
+- channel: Foo
+  time:    12:00
+  repeat: Sun
+  interval: 0:0:30
+- channel: Bar
+  time: 13:23
+  repeat: Mon
+  interval: 30:00
+- Bar
+  time: 14:00
+  repeat: Wed
+  interval: 1:0:0
+""")
 
     def time(self, hour,min):
         return (hour * 60 + min) * 60
 
-    def testTarget(self):
+    def testChannel(self):
         self.assertEqual([ "Foo", "Bar", "Bar" ],
-                         [ x.target for x in self.program ])
+                         [ x.channel for x in self.program ])
 
     def testTime(self):
         self.assertEqual([ self.time(12,00), self.time(13,23), self.time(14,00) ],
                          [ x.time for x in self.program ])
 
 
-    def testWday(self):
-        self.assertEqual([ Program.Sunday, Program.Monday, Program.Wednesday ],
-                         [ x.wday for x in self.program ])
+    def testRepeat(self):
+        self.assertEqual([ TimeTable.Sunday, TimeTable.Monday, TimeTable.Wednesday ],
+                         [ x.repeat for x in self.program ])
 
     def testSec(self):
         self.assertEqual([ 30, self.time(0, 30), self.time(1,0) ],
