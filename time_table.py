@@ -15,7 +15,7 @@ def parse_time(s):
 
 ( Sunday   , Monday  , Tuesday,
   Wednesday, Thursday, Friday ,
-  Saturday , Single ) = range(8)
+  Saturday ) = range(7)
 
 RepeatDict = [
     (re.compile("^sun" , re.I), Sunday),
@@ -25,7 +25,6 @@ RepeatDict = [
     (re.compile("^thur", re.I), Thursday),
     (re.compile("^fri" , re.I) , Friday),
     (re.compile("^sat" , re.I) , Saturday),
-    (re.compile("^single", re.I) , Single)
 ]
 
 def parse_repeat(s):
