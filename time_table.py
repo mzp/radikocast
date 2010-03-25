@@ -13,6 +13,10 @@ def parse_time(s):
     (hour,min) = map(int,s.split(":"))
     return datetime.time(hour, min)
 
+def parse_delta(s):
+    (hour,min) = map(int,s.split(":"))
+    return datetime.timedelta(seconds=((hour*60+min)*60))
+
 ( Sunday   , Monday  , Tuesday,
   Wednesday, Thursday, Friday ,
   Saturday ) = range(7)
@@ -23,8 +27,8 @@ RepeatDict = [
     (re.compile("^tues", re.I), Tuesday),
     (re.compile("^wed" , re.I), Wednesday),
     (re.compile("^thur", re.I), Thursday),
-    (re.compile("^fri" , re.I) , Friday),
-    (re.compile("^sat" , re.I) , Saturday),
+    (re.compile("^fri" , re.I),  Friday),
+    (re.compile("^sat" , re.I), Saturday),
 ]
 
 def parse_repeat(s):
@@ -38,7 +42,7 @@ def read(str):
     def parse():
         for x in yaml.load(str):
             update(x, 'time'    , parse_time)
-            update(x, 'airtime', parse_time)
+            update(x, 'airtime' , parse_delta)
             update(x, 'at'      , parse_repeat)
             yield open_object.OpenObject(x)
     return TimeTable(parse())

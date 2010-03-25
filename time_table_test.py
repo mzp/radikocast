@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # -*- mode:python; coding:utf-8 -*-
 import unittest
-import datetime
+from datetime import *
 from time_table import *
 
 class TimeTableTest(unittest.TestCase):
@@ -25,15 +25,12 @@ class TimeTableTest(unittest.TestCase):
   airtime: "1:00"
 """)
 
-    def time(self, hour,min):
-        return datetime.time(hour,min)
-
     def testChannel(self):
         self.assertEqual([ "Foo", "Bar", "Bar" ],
                          [ x.channel for x in self.program ])
 
     def testTime(self):
-        self.assertEqual([ self.time(12,00), self.time(13,23), self.time(14,00) ],
+        self.assertEqual([ time(12,00), time(13,23), time(14,00) ],
                          [ x.time for x in self.program ])
 
 
@@ -42,7 +39,7 @@ class TimeTableTest(unittest.TestCase):
                          [ x.at for x in self.program ])
 
     def testSec(self):
-        self.assertEqual([ self.time(0,30), self.time(0, 30), self.time(1,0) ],
+        self.assertEqual([ timedelta(seconds=60*30), timedelta(seconds=60*30), timedelta(seconds=60*60) ],
                          [ x.airtime for x in self.program ])
 
     def testOther(self):
