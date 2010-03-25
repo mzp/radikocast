@@ -38,7 +38,7 @@ def read(str):
     def parse():
         for x in yaml.load(str):
             update(x, 'time'    , parse_time)
-            update(x, 'interval', parse_time)
+            update(x, 'airtime', parse_time)
             update(x, 'at'      , parse_repeat)
             yield open_object.OpenObject(x)
     return TimeTable(parse())
