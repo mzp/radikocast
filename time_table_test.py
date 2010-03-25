@@ -1,6 +1,7 @@
 #! /usr/bin/python
 # -*- mode:python; coding:utf-8 -*-
 import unittest
+import datetime
 from time_table import *
 
 class TimeTableTest(unittest.TestCase):
@@ -22,7 +23,7 @@ class TimeTableTest(unittest.TestCase):
 """)
 
     def time(self, hour,min):
-        return (hour * 60 + min) * 60
+        return datetime.time(hour,min)
 
     def testChannel(self):
         self.assertEqual([ "Foo", "Bar", "Bar" ],

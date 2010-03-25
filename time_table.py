@@ -4,16 +4,14 @@
 import yaml
 import re
 import open_object
+import datetime
 
 def update(dict, key, f):
     dict[key] = f(dict[key])
 
-
 def parse_time(s):
-    return 60 * reduce(lambda x,y: x * 60 + y,
-                       map(int,s.split(':')),
-                       0)
-
+    (hour,min) = map(int,s.split(":"))
+    return datetime.time(hour, min)
 
 ( Sunday   , Monday  , Tuesday,
   Wednesday, Thursday, Friday ,

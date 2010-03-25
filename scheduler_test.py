@@ -4,8 +4,9 @@
 
 from scheduler import *
 import time_table
+import datetime
 def time(hour,min):
-    return (hour * 60 + min) * 60
+    return datetime.time(hour, min)
 
 class TestScheduler:
     def setUp(self):
