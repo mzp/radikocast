@@ -12,9 +12,9 @@ class TestScheduler:
             return f
         self.called = {}
         self.scheduler = Scheduler()
-        self.scheduler.add(time=time(12,10),at=time_table.Monday,repeat=True, agent=called('a'))
-        self.scheduler.add(time=time(12,10),at=time_table.Monday,repeat=False, agent=called('b'))
-        self.scheduler.add(time=time(13,20),at=time_table.Wednesday,repeat=False, agent=called('c'))
+        self.scheduler.add(time=time(12,10),at=time_table.Monday   ,repeat=True , callback=called('a'))
+        self.scheduler.add(time=time(12,10),at=time_table.Monday   ,repeat=False, callback=called('b'))
+        self.scheduler.add(time=time(13,20),at=time_table.Wednesday,repeat=False, callback=called('c'))
 
     def test_invoke(self):
         self.scheduler.invoke(datetime(2010, 3, 1, 12, 10))
