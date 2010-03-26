@@ -23,10 +23,14 @@ class application(object):
 
     def on_podcast(self):
         name  = self.get('name')
-        items = self.storage.find_by_name(name)
-        for item in items:
-            item['size'] = os.path.getsize(item['path'])
-            item['type'] = 'audio/aac'
+        items = []
+        for item in self.storage.find_by_name(name):
+            try:
+                item['size'] = os.path.getsize(item['path'])
+                item['type'] = 'audio/aac'
+                items.append(item)
+            except:
+                pass
 
         self.response(200, 'application/rss+xml')
         return template('podcast',
