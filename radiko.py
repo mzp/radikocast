@@ -23,6 +23,7 @@ rtmpdump -B %d -y "simul-stream" -n "radiko.smartstream.ne.jp" -c 1935
  -a "QRR/_defInst_" -f "WIN 10,0,45,2" -v -o -
  | ffmpeg -y -i - -acodec copy %s
 """.replace("\n","") % (airtime.seconds, path)
-        ret = os.system("echo '%s'" % cmd)
+        logging.info(cmd)
+        ret = os.system("%s" % cmd)
         if ret == 0:
             self.storage.add(self.name, time, path, self.other)
