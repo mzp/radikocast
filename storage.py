@@ -3,6 +3,9 @@
 import sqlite3
 import os.path
 import pickle
+import threading
+import logging
+from Queue import Queue
 from base64 import *
 
 class Storage(object):
@@ -18,6 +21,22 @@ create table podcasts(
    object blob
 );
 """))
+        self.q = Queue(3)
+        def f():
+            while True:
+                try:
+                    f = self.q.get(block=True)
+                    logging.info("transaction pop")
+                    f()
+                except Exception, e:
+                    print e
+        t = threading.Thread(target=f)
+        t.setDaemon(True)
+        t.start()
+
+    def transaction(self,f):
+        self.q.put(f, block=True)
+
 
     def add(self, name,created_at, path, obj={}):
         obj['name'] = name

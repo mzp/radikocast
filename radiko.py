@@ -26,4 +26,5 @@ rtmpdump -B %d -y "simul-stream" -n "radiko.smartstream.ne.jp" -c 1935
         logging.info(cmd)
         ret = os.system("%s" % cmd)
         if ret == 0:
-            self.storage.add(self.name, time, path, self.other)
+            self.storage.transaction(
+                lambda : self.storage.add(self.name, time, path, self.other))
