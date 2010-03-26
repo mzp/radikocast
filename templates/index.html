@@ -1,43 +1,44 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset=utf-8 />
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="statics/style.css" type="text/css" />
     <title>Radikocast</title>
   </head>
   <body>
-    <section>
+    <div class="site">
       <h1>Radikocast</h1>
       <p>radiko.jp to Podcast</p>
-    </section>
+    </div>
 
-    <section>
+    <div class="page">
       <h1>番組一覧</h1>
       {{for name, casts in programs}}
-        {{py: cast = casts[0]}}
-        <section>
-	  <h2>{{ name }}</h2>
-	  <p>購読</p>
-	  <table>
-	    <tr>
-	      <td>録音時刻(時間)</td>
-	      <td>{{ cast['time'].strftime("%p %I:%M") }}
-		  ({{ cast['airtime'].seconds / 60}}分)</td>
-	    </tr>
-	    <tr>
-	      <td>繰り返し録音</td>
-	      <td>{{ "有効" if cast['repeat'] else "無効" }}</td>
-	    </tr>
-	    <tr>
-	      <td>最新録音日時</td>
-	      <td>{{ cast['created_at'].isoformat() }}</td>
-	    </tr>
-	    <tr>
-	      <td>最新録音番組</td>
-	      <td><audio src="{{ cast['path']}}" controls="true"/></td>
-	    </tr>
-	  </table>
-	</section>
+      {{py: cast = casts[0]}}
+      <div class="section">
+	<h2>{{ name }}</h2>
+	<p><a href="?m=podcast&name={{ name }}">購読</a></p>
+	<table>
+	  <tr>
+	    <td>録音時刻(時間)</td>
+	    <td>{{ cast['time'].strftime("%p %I:%M") }}
+	      ({{ cast['airtime'].seconds / 60}}分)</td>
+	  </tr>
+	  <tr>
+	    <td>繰り返し録音</td>
+	    <td>{{ "有効" if cast['repeat'] else "無効" }}</td>
+	  </tr>
+	  <tr>
+	    <td>最新録音日時</td>
+	    <td>{{ cast['created_at'].isoformat() }}</td>
+	  </tr>
+	  <tr>
+	    <td>最新録音番組</td>
+	    <td><audio src="{{ cast['path']}}" controls="true"/></td>
+	  </tr>
+	</table>
+      </div>
       {{endfor}}
-    </section>
+    </div>
   </body>
 </html>

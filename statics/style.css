@@ -1,0 +1,69 @@
+html,body,
+h1,h2,h3,h4,h5,
+p,div,
+dl,ul,ol,li,dd,dt,
+table,tr,th,td,
+pre,blockquote,address{
+    margin:0;
+    padding:0;
+    border:0;
+}
+
+/* ------------------------------
+   global
+   ------------------------------ */
+body{
+    font-size:16px;
+    color:#333333;
+    font-family:"Lucida Grande","Lucida Sans Unicode",Arial,Verdana,sans-serif;
+    font-size-adjust:none;
+    line-height:1.5;
+}
+
+
+a[href] {
+    color:#0088CC;
+    text-decoration:none;
+}
+
+a[href]:hover {
+    background-color:#0088CC;
+    color:white;
+    text-decoration:underline;
+}
+
+div.site,div.credits{
+    .filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr=#666666,EndColorStr=#333333);
+    background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAACWCAYAAAAfduJyAAAA0UlEQVQokW3GRw6EIAAAQP6kRtfee++9y/9/wF44kMBlMgBCiACEEIHv+0je98U8z4O575viui6K8zwROI6Dzb7vmG3bSNZ1RWBZFjbzPJNM04QZx5FkGAZyfd9TdF2HQNu2bJqmwdR1TVFVFUVZlggURUGS5zkmyzI2aZoikCQJmziOMVEUkYRhiAmCgML3fQrP8xBwXZfEcRw827bZWJaFgGmabAzDINF1HaNpGkZVVQpFUShkWUbg9/uRSJJETpIkBERRpBAEgQ3P8yQcx6E/NBUb8zvLaFEAAAAASUVORK5CYII=");
+    background-repeat:repeat-x;
+    background-color:#333333;
+    height:80px;
+    color:white;
+}
+
+div.site {
+    text-align: right;
+    margin-bottom:30px;
+    padding-right:10px;
+    border-bottom:2px solid silver;
+}
+
+div.site > h1{
+    font-size:32px;
+    text-shadow: 0px 0px 10px black;
+}
+
+div.section{
+    border: 1px solid silver;
+    padding:10px 10px 10px;
+    margin-bottom:20px;
+
+    border-radius:5px;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+
+    box-shadow: 1px 0 5px silver;
+    -webkit-box-shadow: 1px 0 5px silver;
+    -moz-box-shadow: 1px 0 5px silver;
+}
+
