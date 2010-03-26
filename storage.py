@@ -19,9 +19,12 @@ create table podcasts(
 );
 """))
 
-    def add(self, **args):
+    def add(self, name,created_at, path, obj={}):
+        obj['name'] = name
+        obj['created_at'] = created_at
+        obj['path'] = path
         self.execute__(lambda db: db.execute("insert into podcasts(id,name,created_at, path,object) values(null,?,?,?,?)",
-                                             (args['name'], args['created_at'], args['path'], self.dump__( args ))))
+                                             (name, created_at, path, self.dump__( obj ))))
 
     def find_by_path(self, path):
         def f(db):

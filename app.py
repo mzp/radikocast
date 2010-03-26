@@ -5,6 +5,8 @@ import radiko
 import time_table
 import storage
 import scheduler
+import logging
+
 from datetime import datetime
 import time
 Type = {
@@ -18,10 +20,15 @@ class Loop(threading.Thread):
         self.f = f
 
     def run(self):
-        self.f()
-        time.sleep(self.time)
+        while True:
+            try:
+                self.f()
+                time.sleep(self.time)
+            except e:
+                print e
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG)
     table     = time_table.open("time_table.yaml")
     storage   = storage.Storage('storage.db')
     scheduler = scheduler.Scheduler()
@@ -43,4 +50,3 @@ if __name__ == '__main__':
 
     while True:
         time.sleep(3000)
-

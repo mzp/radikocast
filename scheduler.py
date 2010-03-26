@@ -3,6 +3,7 @@
 from datetime import *
 from itertools import *
 import calendar
+import logging
 
 def take(n, iterable):
     "Return first n items of the iterable as a list"
@@ -55,6 +56,7 @@ class Scheduler(object):
                             lambda x,y: x['time'] < y['time'])
 
     def invoke(self, now):
+        logging.info("invoke at %s" % now)
         for x in takewhile(lambda t: t['time'] <= now, self.table):
             if now <= x['time'] + x['airtime']:
                 x['callback'](now, (x['time'] + x['airtime']) - now)
