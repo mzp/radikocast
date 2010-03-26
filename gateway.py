@@ -6,6 +6,11 @@ from cgi import parse_qs, escape
 import tempita
 from storage import Storage
 
+def template(name, **d):
+    with file(name) as io:
+        t = tempita.Template(io.read())
+        return t.substitute(**d)
+
 class application(object):
     def on_index(self, environ, start_response):
         storage = Storage('storage.db')
@@ -13,9 +18,7 @@ class application(object):
         status = '200 OK'
         response_headers = [('Content-type','text/html')]
         start_response(status, response_headers)
-        with file('templates/index.html') as io:
-            t = tempita.Template(io.read())
-            return t.substitute(programs=programs)
+        return template('templates/index.html', programs=programs)
 
     def __call__(self, environ, start_response):
         parameters = parse_qs(environ.get('QUERY_STRING', ''))
