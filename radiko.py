@@ -1,6 +1,8 @@
 #! /usr/bin/python
 # -*- mode:python; coding:utf-8 -*-
 from uuid import uuid4
+import os
+import os.path
 
 class Radiko(object):
     def __init__(self, storage, name, channel, **other):
@@ -10,6 +12,8 @@ class Radiko(object):
         self.other   = other
 
     def __call__(self, time, airtime):
+        if not os.path.exists('audio'):
+            os.makedirs('audio')
         path = "audio/%s.aac" % uuid4().hex
         cmd = """
 rtmpdump -B %d -y "simul-stream" -n "radiko.smartstream.ne.jp" -c 1935
@@ -18,4 +22,5 @@ rtmpdump -B %d -y "simul-stream" -n "radiko.smartstream.ne.jp" -c 1935
  -a "QRR/_defInst_" -f "WIN 10,0,45,2" -v -o -
  | ffmpeg -y -i - -acodec copy %s
 """.replace("\n","") % (airtime.seconds, path)
-        print cmd
+        os.system("echo '%s'" % cmd)
+
