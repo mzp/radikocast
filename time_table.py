@@ -7,7 +7,8 @@ import open_object
 import datetime
 
 def update(dict, key, f):
-    dict[key] = f(dict[key])
+    if key in dict:
+        dict[key] = f(dict[key])
 
 def parse_time(s):
     (hour,min) = map(int,s.split(":"))
@@ -38,13 +39,17 @@ def parse_repeat(s):
     raise StandardError, ("can not parse: %s" % s)
 
 
+def open(path):
+    with file(path,'r') as io:
+        return read(io.read())
+
 def read(str):
     def parse():
         for x in yaml.load(str):
             update(x, 'time'    , parse_time)
             update(x, 'airtime' , parse_delta)
             update(x, 'at'      , parse_repeat)
-            yield open_object.OpenObject(x)
+            yield x
     return TimeTable(parse())
 
 class TimeTable(object):
