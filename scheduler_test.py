@@ -33,6 +33,11 @@ class TestScheduler:
                            callback = called('c'),
                            now      = datetime(2010,3,1,12,00))
 
+        self.scheduler.add(time     = time(11,55),
+                           airtime  = timedelta(seconds=1200),
+                           callback = called('d'),
+                           now      = datetime(2010,3,1,12,00))
+
     def  count(self, name):
         return len(self.called.get(name,[]))
 
@@ -41,6 +46,7 @@ class TestScheduler:
         eq_(1, self.count('a'))
         eq_(1, self.count('b'))
         eq_(0, self.count('c'))
+        eq_(1, self.count('d'))
 
     def test_repeat(self):
         self.scheduler.invoke(datetime(2010, 3, 1, 12, 10))

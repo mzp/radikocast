@@ -36,16 +36,16 @@ class Scheduler(object):
     def __init__(self):
         self.table = iter([])
 
-    def add(self, time, at, repeat, airtime, callback, now=datetime.now()):
+    def add(self, time, airtime, callback, repeat=None, at=None, now=datetime.now()):
         def stream():
             date = now.date()
             while True:
                 yield datetime.combine(date, time)
                 date = date + timedelta(days=1)
-        days = dropwhile(lambda t: t < now, stream())
+        days = dropwhile(lambda t: t + airtime < now, stream())
         if at != None:
             days = ifilter(lambda t: t.date().weekday() == at, days)
-        if repeat == False:
+        if not repeat:
             days = take(1, days)
         self.table = imerge(imap(lambda t: { 'time' : t,
                                              'airtime' : airtime,
