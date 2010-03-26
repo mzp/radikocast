@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>{{ name }}</title>
+    <link>{{ link }}</link>
+    <description>{{ name }}</description>
+    <language>ja</language>
+
+    {{for item in items}}
+    <item>
+      <title>{{ item['name'] }}( {{ item['created_at'].strftime("%m月%d日") }})</title>
+      <link>{{ item['path'] }}</link>
+      <description>{{ item['created_at'].isoformat() }}</description>
+      <pubDate>{{ item['created_at'].isoformat() }}</pubDate>
+      <enclosure
+	 url="{{ item['path'] }}"
+	 length="{{ item['size'] }}"
+	 type="{{ item['type'] }}" />
+    </item>
+    {{endfor}}
+  </channel>
+</rss>

@@ -1,26 +1,50 @@
 #!/usr/bin/env python
 # -*- coding: utf-8; mode:python-*-
+import tempita
+import os.path
 from wsgiref.handlers import CGIHandler
 from wsgiref.util import *
 from cgi import parse_qs, escape
-import tempita
 from storage import Storage
 
-def template(name, **d):
-    with file(name) as io:
+def template(template, **d):
+    with file("templates/%s.html" % template) as io:
         t = tempita.Template(io.read())
         return t.substitute(**d)
 
 class application(object):
-    def on_index(self, environ, start_response):
-        storage = Storage('storage.db')
-        programs = storage.find_all()
-        status = '200 OK'
-        response_headers = [('Content-type','text/html')]
-        start_response(status, response_headers)
-        return template('templates/index.html', programs=programs)
+    def __init__(self):
+        self.storage = Storage('storage.db')
+
+    def on_index(self):
+        programs = self.storage.find_all()
+        self.response(200)
+        return template('index', programs=programs)
+
+    def on_podcast(self):
+        name  = self.get('name')
+        items = self.storage.find_by_name(name)
+        for item in items:
+            item['size'] = os.path.getsize(item['path'])
+            item['type'] = 'audio/aac'
+
+        self.response(200, 'application/rss+xml')
+        return template('podcast',
+                        name  = name,
+                        link  = escape("?m=podcast&name=%s" % name),
+                        items = items)
 
     def __call__(self, environ, start_response):
-        parameters = parse_qs(environ.get('QUERY_STRING', ''))
-        page = parameters.get('m', ['index'])[0]
-        return self.__getattribute__("on_%s" % page)(environ, start_response)
+        self.parameters     = parse_qs(environ.get('QUERY_STRING', ''))
+        self.environ        = environ
+        self.start_response = start_response
+        return self.__getattribute__("on_%s" % self.get('m', 'index'))()
+
+    def get(self, name, default=None):
+        return self.parameters.get(name, [ default ])[0]
+
+    def response(self, code=200, type='text/html'):
+        status = { 200: '200 OK' }[code]
+        response_headers = [('Content-type', type)]
+        self.start_response(status, response_headers)
+
