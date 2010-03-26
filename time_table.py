@@ -17,9 +17,9 @@ def parse_delta(s):
     (hour,min) = map(int,s.split(":"))
     return datetime.timedelta(seconds=((hour*60+min)*60))
 
-( Sunday   , Monday  , Tuesday,
-  Wednesday, Thursday, Friday ,
-  Saturday ) = range(7)
+( Monday   , Tuesday , Wednesday,
+  Thursday , Friday  , Saturday ,
+  Sunday   ) = range(7)
 
 RepeatDict = [
     (re.compile("^sun" , re.I), Sunday),
