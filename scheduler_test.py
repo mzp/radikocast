@@ -8,7 +8,9 @@ from nose.tools import *
 class TestScheduler:
     def setUp(self):
         def called(name):
-            def f(): self.called[name] = self.called.get(name,0) + 1
+            def f(time, delta):
+                self.called[name] = self.called.get(name, [])
+                self.called[name].append((time,delta))
             return f
         self.called = {}
         self.scheduler = Scheduler()
@@ -32,7 +34,7 @@ class TestScheduler:
                            now      = datetime(2010,3,1,12,00))
 
     def  count(self, name):
-        return self.called.get(name,0)
+        return len(self.called.get(name,[]))
 
     def test_invoke(self):
         self.scheduler.invoke(datetime(2010, 3, 1, 12, 10))
@@ -67,6 +69,12 @@ class TestScheduler:
         eq_(1, self.count('a'))
         eq_(1, self.count('b'))
         eq_(0, self.count('c'))
+
+    def test_time_delta(self):
+        now = datetime(2010, 3, 1, 12, 11)
+        self.scheduler.invoke(now)
+        eq_([(now, timedelta(seconds=60*9))], self.called['a'])
+        eq_([(now, timedelta(seconds=60*9))], self.called['b'])
 
     def test_not_invoke_later(self):
         self.scheduler.invoke(datetime(2010, 3, 1, 12, 21))

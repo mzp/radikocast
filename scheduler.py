@@ -57,5 +57,5 @@ class Scheduler(object):
     def invoke(self, now):
         for x in takewhile(lambda t: t['time'] <= now, self.table):
             if now <= x['time'] + x['airtime']:
-                x['callback']()
+                x['callback'](now, (x['time'] + x['airtime']) - now)
 
