@@ -57,6 +57,10 @@ div.site *{
     color:white !IMPORTANT;
 }
 
+p {
+    margin-bottom:10px;
+}
+
 div.section{
     border: 1px solid silver;
     padding:10px 10px 10px;

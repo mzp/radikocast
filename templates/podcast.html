@@ -8,7 +8,7 @@
 
     {{for item in items}}
     <item>
-      <title>{{ item['name'] }}( {{ item['created_at'].strftime("%m月%d日") }})</title>
+      <title>{{ item['title'] }}( {{ item['created_at'].strftime("%m月%d日") }})</title>
       <link>{{ item['path'] }}</link>
       <description>{{ item['created_at'].isoformat() }}</description>
       <pubDate>{{ item['created_at'].isoformat() }}</pubDate>

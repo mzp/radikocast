@@ -33,6 +33,8 @@ class application(object):
         items = []
         for item in self.storage.find_by_name(name):
             try:
+                if not 'title' in items:
+                    item['title'] = item['name']
                 item['size'] = os.path.getsize(item['path'])
                 item['type'] = 'audio/aac'
                 items.append(item)

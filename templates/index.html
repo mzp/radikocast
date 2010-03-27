@@ -3,7 +3,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
     <link rel="stylesheet" href="statics/style.css" type="text/css" />
-    <title>Radikoitem</title>
+    <title>Radikocast</title>
   </head>
   <body>
     <div class="site">
@@ -12,11 +12,22 @@
     </div>
 
     <div class="page">
+      <h1>せつめい!</h1>
+      <p>radiko.jpの番組を録音して、Podcast化しています。</p>
+
+      <p>
+	一般公開すると怒られる気がするので、録音ファイルにはベーシック認証をかけています。
+	ボクのお友達にはパスワードを教えるので、<a href="http://twitter.com/mzp">@mzp</a>まで連絡ください。
+      </p>
+
+      <p>
+	ソースコードは、<a href="http://github.com/mzp/radikocast">github</a>にあります。自由につかってください。</p>
+
       <h1>番組一覧</h1>
       {{for item in items}}
       <div class="section">
 	<h2>{{ item['title'] }}</h2>
-	<p><a href="?m=poditem&name={{ item['name'] }}">購読</a></p>
+	<p><a href="?m=podcast&name={{ item['name'] }}">購読</a></p>
 	<table>
 	  <tr>
 	    <td>録音時刻(時間)</td>
