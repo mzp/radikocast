@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/opt/local/bin/python
 # -*- coding: utf-8; mode:python-*-
 from wsgiref.handlers import CGIHandler
 from gateway import application

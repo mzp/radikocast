@@ -2,6 +2,7 @@
 # -*- coding: utf-8; mode:python-*-
 import tempita
 import os.path
+import traceback
 from wsgiref.handlers import CGIHandler
 from wsgiref.util import *
 from cgi import parse_qs, escape
@@ -17,9 +18,15 @@ class application(object):
         self.storage = Storage('storage.db')
 
     def on_index(self):
-        programs = self.storage.find_all()
+        items    = map(lambda x: x[1][0],
+                       filter(lambda x: len(x[1]) > 0,
+                              self.storage.find_all()))
+        for item in items:
+            if not 'title' in items:
+                item['title'] = item['name']
+
         self.response(200)
-        return template('index', programs=programs)
+        return template('index', items=items)
 
     def on_podcast(self):
         name  = self.get('name')
@@ -42,13 +49,20 @@ class application(object):
         self.parameters     = parse_qs(environ.get('QUERY_STRING', ''))
         self.environ        = environ
         self.start_response = start_response
-        return self.__getattribute__("on_%s" % self.get('m', 'index'))()
+        try:
+            return self.__getattribute__("on_%s" % self.get('m', 'index'))()
+        except Exception,e:
+            self.response(500)
+            return template('error',
+                            error=str(e),
+                            trace=escape(traceback.format_exc()))
 
     def get(self, name, default=None):
         return self.parameters.get(name, [ default ])[0]
 
     def response(self, code=200, type='text/html'):
-        status = { 200: '200 OK' }[code]
+        status = { 200: '200 OK',
+                   500: '500 Internal Server Error'}[code]
         response_headers = [('Content-type', type)]
         self.start_response(status, response_headers)
 
