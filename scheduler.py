@@ -57,7 +57,9 @@ class Scheduler(object):
 
     def invoke(self, now):
         logging.info("invoke at %s" % now)
-        for x in takewhile(lambda t: t['time'] <= now, self.table):
+        (xs, ys) = tee(self.table, 2)
+        for x in takewhile(lambda t: t['time'] <= now, xs):
             if now <= x['time'] + x['airtime']:
                 x['callback'](now, (x['time'] + x['airtime']) - now)
+        self.table = dropwhile(lambda t: t['time'] <= now, ys)
 
