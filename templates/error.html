@@ -1,9 +1,23 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
   <head>
-    <title>Error: {{ error }}</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <title>Error: {{ error}}</title>
+
+    <link rel="stylesheet" href="statics/style.css" type="text/css" />
+    <!--[if lt IE 8]><link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
   </head>
-<body>
-  <h1>Error: {{ error }}</h1>
-  <pre>{{ trace }}</pre>
-</body>
+  <body>
+    <div class="site">
+      <h1><a href=".">Radikocast</a></h1>
+      <p>radiko.jp to Poditem</p>
+    </div>
+
+    <div class="page">
+      <h1>Error: {{ error }}</h1>
+      <pre class="error">{{trace}}</pre>
+    </div>
+  </body>
 </html>
+
+
