@@ -48,6 +48,11 @@ class TestScheduler:
         eq_(0, self.count('c'))
         eq_(1, self.count('d'))
 
+    def test_invoke_bug(self):
+        self.scheduler.invoke(datetime(2010, 3, 1, 12, 9))
+        self.scheduler.invoke(datetime(2010, 3, 1, 12, 10))
+        eq_(1, self.count('a'))
+
     def test_repeat(self):
         self.scheduler.invoke(datetime(2010, 3, 1, 12, 10))
         self.scheduler.invoke(datetime(2010, 3, 8, 12, 10))
