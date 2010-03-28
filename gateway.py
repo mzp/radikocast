@@ -22,7 +22,7 @@ class application(object):
                        filter(lambda x: len(x[1]) > 0,
                               self.storage.find_all()))
         for item in items:
-            if not 'title' in items:
+            if not 'title' in item:
                 item['title'] = item['name']
 
         self.response(200)
@@ -33,7 +33,7 @@ class application(object):
         items = []
         for item in self.storage.find_by_name(name):
             try:
-                if not 'title' in items:
+                if not 'title' in item:
                     item['title'] = item['name']
                 item['size'] = os.path.getsize(item['path'])
                 item['type'] = 'audio/aac'
