@@ -30,7 +30,7 @@ class Encoder(object):
         def f():
             if not os.path.exists('audio'):
                 os.makedirs('audio')
-            path = "audio/%s.m4a" % uuid4().hex
+            path = "audio/%s.mp3" % uuid4().hex
             cmd = "ffmpeg -y -i %s %s >/dev/null 2>&1" % (entry['original'], path)
             logging.info(cmd)
             ret = os.system(cmd)
