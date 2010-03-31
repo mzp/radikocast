@@ -27,7 +27,7 @@ class application(object):
             item['created_at'] = datetime.datetime.utcfromtimestamp(item['created_at'])
 
         self.response(200)
-        return template('index', items=items,host=host)
+        return template('index', items=items)
 
     def on_podcast(self):
         name  = self.get('name')
