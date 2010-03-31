@@ -18,9 +18,7 @@ class application(object):
         self.storage = Storage('storage.db')
 
     def on_index(self):
-        items    = map(lambda x: x[1][0],
-                       filter(lambda x: len(x[1]) > 0,
-                              self.storage.find_all()))
+        items =  self.storage.list()
         for item in items:
             if not 'title' in item:
                 item['title'] = item['name']
