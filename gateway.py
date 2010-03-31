@@ -27,10 +27,11 @@ class application(object):
             item['created_at'] = datetime.datetime.utcfromtimestamp(item['created_at'])
 
         self.response(200)
-        return template('index', items=items)
+        return template('index', items=items,host=host)
 
     def on_podcast(self):
         name  = self.get('name')
+        host =  application_uri(self.environ).replace('index.cgi','')
         items = []
         for item in self.storage.find_by_name(name):
             if not 'title' in item:
@@ -41,8 +42,9 @@ class application(object):
             items.append(item)
         self.response(200, 'application/rss+xml')
         return template('podcast',
-                        name  = name,
+                        name  = items[0]['title'],
                         link  = escape("?m=podcast&name=%s" % name),
+                        host  = host,
                         items = items)
 
     def __call__(self, environ, start_response):

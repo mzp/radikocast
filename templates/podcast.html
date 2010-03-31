@@ -13,7 +13,7 @@
       <description>{{ item['created_at'].isoformat() }}</description>
       <pubDate>{{ item['created_at'].isoformat() }}</pubDate>
       <enclosure
-	 url="{{ item['path'] }}"
+	 url="./{{ item['path'] }}"
 	 length="{{ item['size'] }}"
 	 type="{{ item['type'] }}" />
     </item>
