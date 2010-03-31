@@ -5,12 +5,14 @@ import os.path
 import pickle
 import threading
 import logging
+import broadcast
 from Queue import Queue
 from base64 import *
 
 class Storage(object):
     def __init__(self, path):
         self.path = path
+        self.broadcast = broadcast.broadcast()
         if not os.path.exists(path):
             self.execute__(lambda db: db.execute("""CREATE TABLE podcasts(
                                                             id integer primary key not null,
@@ -48,6 +50,7 @@ INSERT INTO podcasts(id  ,name, created_at, original, path, object)
         obj['path']       = path
         obj['original']   = original
         self.execute__(f)
+        self.broadcast(obj)
 
     def find_by_name(self, name):
         def f(db):
@@ -110,3 +113,6 @@ INSERT INTO podcasts(id  ,name, created_at, original, path, object)
         item['id']   = id
         item['path'] = path
         return item
+
+    def listen(self, f):
+        self.broadcast += f

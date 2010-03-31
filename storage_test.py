@@ -88,3 +88,16 @@ class TestStorage:
         (p5, p6) = self.storage.find_incomplete()
         ok( self.p5, p5)
         ok( self.p6, p6)
+
+    def test_listen(self):
+        self.called = None
+        def f(entry):
+            self.called = entry
+        self.storage.listen(f)
+        p = { 'name'       : "program3",
+              'created_at' : 6,
+              'original'   : "7.aac" }
+        self.storage.add(**p)
+        ok(p, self.called)
+
+
