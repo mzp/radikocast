@@ -6,6 +6,7 @@ import pickle
 import threading
 import logging
 import broadcast
+import traceback
 from Queue import Queue
 from base64 import *
 
@@ -29,7 +30,9 @@ class Storage(object):
                     logging.info("transaction pop")
                     f()
                 except Exception, e:
-                    print e
+                    logging.error(e)
+                    logging.error(traceback.format_exc())
+
         t = threading.Thread(target=f)
         t.setDaemon(True)
         t.start()
@@ -45,17 +48,18 @@ class Storage(object):
 INSERT INTO podcasts(id  ,name, created_at, original, path, object)
               VALUES(null,   ?,          ?,        ?,    ?,      ?)""",
                        (  name, created_at, original, path, dump))
+            return db.execute("SELECT last_insert_rowid()").fetchone()[0]
         obj['name']       = name
         obj['created_at'] = created_at
         obj['path']       = path
         obj['original']   = original
-        self.execute__(f)
-        self.broadcast(obj)
+        id = self.execute__(f)
+        self.broadcast(self.find_by_id(id))
 
     def find_by_name(self, name):
         def f(db):
             cur = db.execute("""SELECT id, path, object FROM podcasts
-                                                        WHERE name = ? AND path <> ""
+                                                        WHERE name = ? AND path NOTNULL
                                                         ORDER BY created_at DESC""",
                              [ name ])
             return map(lambda args: self.load_obj(*args), cur.fetchall())
@@ -67,7 +71,7 @@ INSERT INTO podcasts(id  ,name, created_at, original, path, object)
                                                         WHERE id = ?
                                                         ORDER BY created_at DESC""",
                              [ id ])
-            return map(lambda args: self.load_obj(*args), cur.fetchall())
+            return self.load_obj(*cur.fetchone())
         return self.execute__(f)
 
     def find_incomplete(self):
@@ -116,3 +120,4 @@ INSERT INTO podcasts(id  ,name, created_at, original, path, object)
 
     def listen(self, f):
         self.broadcast += f
+

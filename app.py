@@ -5,6 +5,7 @@ import radiko
 import time_table
 import storage
 import scheduler
+import encoder
 import logging
 
 from datetime import datetime
@@ -31,7 +32,12 @@ if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
     table     = time_table.open("time_table.yaml")
     storage   = storage.Storage('storage.db')
+    encoder   = encoder.Encoder(storage)
     scheduler = scheduler.Scheduler()
+
+    storage.listen(lambda entry: encoder.add(entry))
+    for entry in storage.find_incomplete():
+        encoder.add(entry)
 
     for program in table:
         if program['type'] in Type:

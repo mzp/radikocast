@@ -65,12 +65,12 @@ class TestStorage:
         ok(self.p2, p2)
 
     def test_find_by_id(self):
-        (p1,) = self.storage.find_by_id(1)
+        p1 = self.storage.find_by_id(1)
         print p1
         eq_(1, p1['id'])
         ok( self.p1, p1)
 
-        (p4,) = self.storage.find_by_id(4)
+        p4 = self.storage.find_by_id(4)
         eq_(4, p4['id'])
         ok( self.p4, p4)
 
@@ -82,7 +82,7 @@ class TestStorage:
 
     def test_update(self):
         self.storage.update(4, '4.mp3')
-        (p4,) = self.storage.find_by_id(4)
+        p4 = self.storage.find_by_id(4)
         eq_( '4.mp3', p4['path'])
 
         (p5, p6) = self.storage.find_incomplete()
