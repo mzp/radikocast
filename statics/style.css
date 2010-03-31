@@ -83,3 +83,14 @@ div.page{
 .error {
     border: 1px solid red;
 }
+
+ul{
+    margin-left:20px;
+}
+
+div.page > h1{
+    margin: 20px 0;
+}
+div.page > h2{
+    margin: 5px 0;
+}
