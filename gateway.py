@@ -17,6 +17,7 @@ def template(template, **d):
 class application(object):
     def __init__(self):
         self.storage = Storage('storage.db')
+        self.responsed = False
 
     def on_index(self):
         items =  self.storage.list()
@@ -32,16 +33,12 @@ class application(object):
         name  = self.get('name')
         items = []
         for item in self.storage.find_by_name(name):
-            try:
-                if not 'title' in item:
-                    item['title'] = item['name']
-                item['created_at'] = datetime.datetime.utcfromtimestamp(item['created_at'])
-                item['size'] = os.path.getsize(item['path'])
-                item['type'] = 'audio/aac'
-                items.append(item)
-            except:
-                pass
-
+            if not 'title' in item:
+                item['title'] = item['name']
+            item['created_at'] = datetime.datetime.utcfromtimestamp(item['created_at'])
+            item['size'] = os.path.getsize(item['path'])
+            item['type'] = 'audio/aac'
+            items.append(item)
         self.response(200, 'application/rss+xml')
         return template('podcast',
                         name  = name,
