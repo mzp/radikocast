@@ -3,6 +3,7 @@
 import tempita
 import os.path
 import traceback
+import datetime
 from wsgiref.handlers import CGIHandler
 from wsgiref.util import *
 from cgi import parse_qs, escape
@@ -22,6 +23,7 @@ class application(object):
         for item in items:
             if not 'title' in item:
                 item['title'] = item['name']
+            item['created_at'] = datetime.datetime.utcfromtimestamp(item['created_at'])
 
         self.response(200)
         return template('index', items=items)
