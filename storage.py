@@ -49,16 +49,12 @@ INSERT INTO podcasts(id  ,name, created_at, original, path, object)
               VALUES(null,   ?,          ?,        ?,    ?,      ?)""",
                        (  name, created_at, original, path, dump))
             return db.execute("SELECT last_insert_rowid()").fetchone()[0]
-        obj['name']       = name
-        obj['created_at'] = created_at
-        obj['path']       = path
-        obj['original']   = original
         id = self.execute__(f)
         self.broadcast(self.find_by_id(id))
 
     def find_by_name(self, name):
         def f(db):
-            cur = db.execute("""SELECT id, path, object FROM podcasts
+            cur = db.execute("""SELECT * FROM podcasts
                                                         WHERE name = ? AND path NOTNULL
                                                         ORDER BY created_at DESC""",
                              [ name ])
@@ -67,7 +63,7 @@ INSERT INTO podcasts(id  ,name, created_at, original, path, object)
 
     def find_by_id(self, id):
         def f(db):
-            cur = db.execute("""SELECT id, path, object FROM podcasts
+            cur = db.execute("""SELECT * FROM podcasts
                                                         WHERE id = ?
                                                         ORDER BY created_at DESC""",
                              [ id ])
@@ -76,7 +72,7 @@ INSERT INTO podcasts(id  ,name, created_at, original, path, object)
 
     def find_incomplete(self):
         def f(db):
-            cur = db.execute("""SELECT id, path, object FROM podcasts
+            cur = db.execute("""SELECT * FROM podcasts
                                                         WHERE path ISNULL
                                                         ORDER BY created_at ASC""",[])
             return map(lambda args: self.load_obj(*args), cur.fetchall())
@@ -84,7 +80,7 @@ INSERT INTO podcasts(id  ,name, created_at, original, path, object)
 
     def list(self):
         def f(db):
-            cur = db.execute("""SELECT id, path, object FROM podcasts
+            cur = db.execute("""SELECT * FROM podcasts
                                                         WHERE path NOTNULL
                                                         GROUP BY name
                                                         ORDER BY created_at DESC""",[])
@@ -112,12 +108,15 @@ INSERT INTO podcasts(id  ,name, created_at, original, path, object)
     def load__(self, s):
         return pickle.loads(b64decode(s))
 
-    def load_obj(self, id, path, obj):
+    def load_obj(self, id, name, path, original, created_at, obj):
         item = self.load__(obj)
         item['id']   = id
+        item['name']   = name
+        item['path']   = path
+        item['original']   = original
+        item['created_at']   = created_at
         item['path'] = path
         return item
 
     def listen(self, f):
         self.broadcast += f
-

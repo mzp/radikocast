@@ -17,7 +17,8 @@ class Encoder(object):
                     logging.info("encoding pop")
                     f()
                 except Exception, e:
-                    print e
+                    logging.error(e)
+                    logging.error(traceback.format_exc())
         t = threading.Thread(target=f)
         t.setDaemon(True)
         t.start()
