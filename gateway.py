@@ -52,7 +52,8 @@ class application(object):
         try:
             return self.__getattribute__("on_%s" % self.get('m', 'index'))()
         except Exception,e:
-            self.response(500)
+            if not self.responsed == True:
+                self.response(500)
             return template('error',
                             error=str(e),
                             trace=escape(traceback.format_exc()))
@@ -65,4 +66,5 @@ class application(object):
                    500: '500 Internal Server Error'}[code]
         response_headers = [('Content-type', type)]
         self.start_response(status, response_headers)
+        self.responsed = True
 
