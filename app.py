@@ -21,6 +21,7 @@ class Loop(threading.Thread):
         self.f = f
 
     def run(self):
+        logging.info("start scheduler thread")
         while True:
             try:
                 self.f()
@@ -36,9 +37,6 @@ if __name__ == '__main__':
     scheduler = scheduler.Scheduler()
 
     storage.listen(lambda entry: encoder.add(entry))
-    for entry in storage.find_incomplete():
-        encoder.add(entry)
-
     for program in table:
         if program['type'] in Type:
             def f(*args):
@@ -56,6 +54,9 @@ if __name__ == '__main__':
     t = Loop(30.0, lambda: scheduler.invoke(datetime.now()))
     t.setDaemon(True)
     t.start()
+
+    for entry in storage.find_incomplete():
+        encoder.add(entry)
 
     while True:
         time.sleep(3000)
