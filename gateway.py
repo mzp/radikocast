@@ -35,6 +35,7 @@ class application(object):
             try:
                 if not 'title' in item:
                     item['title'] = item['name']
+                item['created_at'] = datetime.datetime.utcfromtimestamp(item['created_at'])
                 item['size'] = os.path.getsize(item['path'])
                 item['type'] = 'audio/aac'
                 items.append(item)
