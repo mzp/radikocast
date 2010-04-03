@@ -7,6 +7,7 @@ import threading
 import logging
 import broadcast
 import traceback
+import datetime
 from Queue import Queue
 from base64 import *
 
@@ -15,13 +16,15 @@ class Storage(object):
         self.path = path
         self.broadcast = broadcast.broadcast()
         if not os.path.exists(path):
-            self.execute__(lambda db: db.execute("""CREATE TABLE podcasts(
-                                                            id integer primary key not null,
-                                                            name text not null,
-                                                            path text,
-                                                            original text not null,
-                                                            created_at integer not null,
-                                                            object blob not null);"""))
+            self.execute__(lambda db: db.execute("""
+CREATE TABLE podcasts(
+  id integer primary key not null,
+  name text not null,
+  path text,
+  original_name text,
+  original text not null,
+  created_at integer not null,
+  object blob not null);"""))
         self.q = Queue(3)
         def f():
             while True:
@@ -41,16 +44,29 @@ class Storage(object):
         self.q.put(f, block=True)
 
 
-    def add(self, name,created_at, original, path=None, obj={}):
+    def add(self, name, original,
+            created_at    = int(datetime.datetime.now().strftime("%s")),
+            path          = None,
+            original_name = None,
+            obj           = {}):
         def f(db):
             dump = self.dump__( obj )
             db.execute("""
-INSERT INTO podcasts(id  ,name, created_at, original, path, object)
-              VALUES(null,   ?,          ?,        ?,    ?,      ?)""",
-                       (  name, created_at, original, path, dump))
+INSERT INTO podcasts(id  ,name, path,original_name, original,created_at,object)
+              VALUES(null,   ?,    ?,            ?,         ?,        ?,    ?)""",
+                       (  name, path,original_name, original,created_at, dump))
             return db.execute("SELECT last_insert_rowid()").fetchone()[0]
         id = self.execute__(f)
         self.broadcast(self.find_by_id(id))
+
+    def exist(self, name, original_name):
+        def f(db):
+            cur = db.execute("""SELECT * FROM podcasts
+                                WHERE name = ? AND original_name = ?
+                                LIMIT 1""",
+                             [ name, original_name ])
+            return bool(cur.fetchone())
+        return self.execute__(f)
 
     def find_by_name(self, name):
         def f(db):
@@ -108,14 +124,14 @@ INSERT INTO podcasts(id  ,name, created_at, original, path, object)
     def load__(self, s):
         return pickle.loads(b64decode(s))
 
-    def load_obj(self, id, name, path, original, created_at, obj):
+    def load_obj(self, id, name, path, original_name, original, created_at, obj):
         item = self.load__(obj)
-        item['id']   = id
-        item['name']   = name
-        item['path']   = path
+        item['id']         = id
+        item['name']       = name
+        item['path']       = path
+        item['original_name'] = original_name
         item['original']   = original
-        item['created_at']   = created_at
-        item['path'] = path
+        item['created_at'] = created_at
         return item
 
     def listen(self, f):

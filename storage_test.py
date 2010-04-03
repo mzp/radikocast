@@ -70,8 +70,8 @@ class TestStorage:
         ok(self.p2, p2)
 
     def test_exist_name_and_file(self):
-        eq_(True, self.storage.exist('program1','foo'))
-        eq_(True, self.storage.exist('program1','bar'))
+        eq_(True,  self.storage.exist('program1','foo'))
+        eq_(True,  self.storage.exist('program1','bar'))
         eq_(False, self.storage.exist('program1','fuga'))
 
     def test_find_by_id(self):
@@ -106,6 +106,7 @@ class TestStorage:
         self.storage.listen(f)
         p = { 'name'       : "program3",
               'created_at' : 6,
+              'original_name' : None,
               'original'   : "7.aac" }
         self.storage.add(**p)
         ok(p, self.called)
