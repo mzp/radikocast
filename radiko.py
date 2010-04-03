@@ -27,4 +27,7 @@ rtmpdump -B %d -y "simul-stream" -n "radiko.smartstream.ne.jp" -c 1935
         ret = os.system("%s" % cmd)
         if ret == 0:
             self.storage.transaction(
-                lambda : self.storage.add(self.name, int(time.strftime("%s")), path, obj=self.other))
+                lambda : self.storage.add(name       = self.name,
+                                          created_at = int(time.strftime("%s")),
+                                          path       = path,
+                                          obj        = self.other))
