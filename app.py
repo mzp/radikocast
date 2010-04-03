@@ -2,6 +2,7 @@
 # -*- mode:python; coding:utf-8 -*-
 import threading
 import radiko
+import kurousagi
 import time_table
 import storage
 import scheduler
@@ -11,7 +12,8 @@ import logging
 from datetime import datetime
 import time
 Type = {
-    'radiko' : radiko.Radiko
+    'radiko' : radiko.Radiko,
+    'kurousagi' : kurousagi.Kurousagi
 }
 
 class Loop(threading.Thread):
