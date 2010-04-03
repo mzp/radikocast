@@ -34,7 +34,6 @@ class Encoder(object):
             cmd = "ffmpeg -y -i %s %s >/dev/null 2>&1" % (entry['original'], path)
             logging.info(cmd)
             ret = os.system(cmd)
-            if ret == 0:
-                self.storage.transaction(
-                    lambda : self.storage.update(entry['id'], path))
+            self.storage.transaction(
+                lambda : self.storage.update(entry['id'], path))
         self.q.put(f, block=True)
