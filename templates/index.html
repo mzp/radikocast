@@ -44,7 +44,7 @@
 	  </tr>
 	  <tr>
 	    <td>繰り返し録音</td>
-	    <td>{{ "有効" if item['repeat'] else "無効" }}</td>
+	    <td>{{ "有効" if item.get('repeat',False) else "無効" }}</td>
 	  </tr>
 	  <tr>
 	    <td>最新録音日時</td>
