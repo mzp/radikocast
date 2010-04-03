@@ -37,4 +37,6 @@ class Encoder(object):
             if ret == 0:
                 self.storage.transaction(
                     lambda : self.storage.update(entry['id'], path))
+            else:
+                logging.error("ffmpeg failed")
         self.q.put(f, block=True)
