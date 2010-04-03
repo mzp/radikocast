@@ -22,24 +22,30 @@ class TestStorage:
 
         self.storage = Storage('test.db')
         self.p1 = { 'name'       : "program1",
+                    'original_name' : 'foo',
                     'created_at' : 1,
                     'original'   : "1.aac",
                     'path'       : "1.mp3" }
         self.p2 = { 'name'       : "program1",
+                    'original_name' : 'bar',
                     'created_at' : 2,
                     'original'   : "2.aac",
                     'path'       : "2.mp3" }
         self.p3 = { 'name'       : "program2",
                     'created_at' : 1,
+                    'original_name' : 'baz',
                     'original'   : "3.aac",
                     'path'       : "3.mp3" }
         self.p4 = { 'name'       : "program1",
+                    'original_name' : 'baz',
                     'created_at' : 3,
                     'original'   : "4.aac" }
         self.p5 = { 'name'       : "program1",
+                    'original_name' : 'hoge',
                     'created_at' : 4,
                     'original'   : "5.aac" }
         self.p6 = { 'name'       : "program2",
+                    'original_name' : 'fuga',
                     'created_at' : 5,
                     'original'   : "6.aac" }
 
@@ -59,10 +65,14 @@ class TestStorage:
         ok(self.p3, p3)
 
     def test_find_by_name(self):
-        print self.storage.find_by_name("program1")
         (p2, p1) = self.storage.find_by_name("program1")
         ok(self.p1, p1)
         ok(self.p2, p2)
+
+    def test_exist_name_and_file(self):
+        eq_(True, self.storage.exist('program1','foo'))
+        eq_(True, self.storage.exist('program1','bar'))
+        eq_(False, self.storage.exist('program1','fuga'))
 
     def test_find_by_id(self):
         p1 = self.storage.find_by_id(1)
