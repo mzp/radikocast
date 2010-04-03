@@ -57,8 +57,8 @@ class Kurousagi(object):
         self.storage.transaction(
             lambda : self.storage.add(name = self.name,
                                       created_at  = int(time.strftime("%s")),
-                                      path        = path,
-                                      orinal_name = filename,
+                                      original    = path,
+                                      original_name = filename,
                                       obj=self.other))
 
 if __name__ == '__main__':
