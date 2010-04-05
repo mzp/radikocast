@@ -6,9 +6,8 @@ import os.path
 import logging
 
 class Radiko(object):
-    def __init__(self, storage, name, channel, **other):
+    def __init__(self, storage, channel, **other):
         self.storage = storage
-        self.name    = name
         self.channel = channel
         self.other   = other
 
@@ -27,7 +26,6 @@ rtmpdump -B %d -y "simul-stream" -n "radiko.smartstream.ne.jp" -c 1935
         ret = os.system("%s" % cmd)
         if ret == 0:
             self.storage.transaction(
-                lambda : self.storage.add(name       = self.name,
-                                          created_at = int(time.strftime("%s")),
+                lambda : self.storage.add(created_at = int(time.strftime("%s")),
                                           original   = path,
-                                          obj        = self.other))
+                                          **self.other))
