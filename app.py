@@ -32,7 +32,15 @@ class Loop(threading.Thread):
                 print e
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.DEBUG,
+                        format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
+                        datefmt='%m-%d %H:%M',
+                        filename='radikocast.log',
+                        filemode='w')
+    console = logging.StreamHandler()
+    console.setLevel(logging.DEBUG)
+    logging.getLogger('').addHandler(console)
+
     table     = time_table.open("time_table.yaml")
     storage   = storage.Storage('storage.db')
     encoder   = encoder.Encoder(storage)
