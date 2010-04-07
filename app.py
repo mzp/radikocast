@@ -4,13 +4,16 @@ import threading
 import radiko
 import kurousagi
 import time_table
-import storage
-import scheduler
-import encoder
+from storage   import Storage
+from scheduler import Scheduler
+from encoder   import Encoder
 import logging
+
+import daemon
 
 from datetime import datetime
 import time
+
 Type = {
     'radiko' : radiko.Radiko,
     'kurousagi' : kurousagi.Kurousagi
@@ -31,20 +34,16 @@ class Loop(threading.Thread):
             except Exception, e:
                 print e
 
-if __name__ == '__main__':
+def run():
     logging.basicConfig(level=logging.DEBUG,
                         format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
                         datefmt='%m-%d %H:%M',
                         filename='radikocast.log',
                         filemode='w')
-    console = logging.StreamHandler()
-    console.setLevel(logging.DEBUG)
-    logging.getLogger('').addHandler(console)
-
     table     = time_table.open("time_table.yaml")
-    storage   = storage.Storage('storage.db')
-    encoder   = encoder.Encoder(storage)
-    scheduler = scheduler.Scheduler()
+    storage   = Storage('storage.db')
+    encoder   = Encoder(storage)
+    scheduler = Scheduler()
 
     storage.listen(lambda entry: encoder.add(entry))
     for program in table:
@@ -70,3 +69,6 @@ if __name__ == '__main__':
 
     while True:
         time.sleep(3000)
+
+if __name__ == '__main__':
+    daemon.daemonize('radicocast.pid',run)
