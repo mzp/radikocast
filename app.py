@@ -49,15 +49,18 @@ if __name__ == '__main__':
     storage.listen(lambda entry: encoder.add(entry))
     for program in table:
         if program['type'] in Type:
-            def f(*args):
-                agent = Type[program['type']](storage=storage, **program)
-                t = threading.Thread(target=lambda: agent(*args))
-                t.start()
-            scheduler.add(time     = program['time'],
-                          airtime  = program['airtime'],
-                          at       = program.get('at',None),
-                          repeat   = program.get('repeat',None),
-                          callback = f)
+            def scope():
+                p = program
+                def f(*args):
+                    agent = Type[p['type']](storage=storage, **p)
+                    t = threading.Thread(target=lambda: agent(*args))
+                    t.start()
+                scheduler.add(time     = program['time'],
+                              airtime  = program['airtime'],
+                              at       = program.get('at',None),
+                              repeat   = program.get('repeat',None),
+                              callback = f)
+            scope()
         else:
             print "unknown type: %s" % type
 
